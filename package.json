@@ -1,6 +1,9 @@
 {
-  "name": "aluracord",
-  "private": true,
+  "name": "Aluracord",
+  "private": false,
+  "version": "1.0.0",
+  "repository": "git@github.com:favasconcelos/aluracord.git",
+  "authors": "Felipe Vasconcelos <f@avasconcelos.com>",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -13,7 +16,11 @@
     "react-dom": "17.0.2"
   },
   "devDependencies": {
+    "autoprefixer": "10.4.2",
     "eslint": "8.7.0",
-    "eslint-config-next": "12.0.8"
+    "eslint-config-next": "12.0.8",
+    "postcss": "8.4.5",
+    "prettier": "2.5.1",
+    "tailwindcss": "3.0.16"
   }
 }
