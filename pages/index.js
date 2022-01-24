@@ -43,7 +43,7 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="w-screen h-screen bg-red-200 flex items-center justify-center bg-home-background bg-no-repeat bg-cover">
-        <div className="rounded-md bg-neutrals-700 p-6 md:p-8 flex flex-row gap-x-4 md:gap-x-10 m-4">
+        <div className="rounded-md bg-neutrals-700 p-6 md:p-8 flex flex-row gap-x-4 md:gap-x-10 border border-neutrals-600">
           <form onSubmit={handleSubmit}>
             <h1 className="text-white text-center text-xl md:text-2xl font-bold">Boas vindas de volta!</h1>
             <h2 className="text-neutrals-300 text-center text-sm font-bold mt-1">Aluracord - Alura Matrix</h2>
@@ -53,17 +53,20 @@ export default function Home() {
               id="username"
               name="username"
               autoComplete="username"
-              className="px-3 h-9 rounded-md w-full bg-neutrals-800 text-white outline-none mt-7"
+              className="px-3 h-9 rounded-md w-full bg-neutrals-800 text-white outline-none mt-7 transition-colors border border-transparent hover:border-primary-700 focus:border-primary-700"
               type="text"
+              maxLength={20}
               placeholder="Usuário do GitHub"
               value={username}
               onChange={handleInputChange}
             />
-            <button type="submit" className="w-full bg-primary-500 text-white h-9 mt-3 rounded-md">
+            <button
+              type="submit"
+              className="w-full bg-primary-500 text-white h-9 mt-3 rounded-md transition-colors hover:bg-primary-700">
               Entrar
             </button>
           </form>
-          <div className="bg-neutrals-800 flex flex-col items-center justify-center p-2 gap-4 border rounded-xl border-neutrals-999">
+          <div className="bg-neutrals-800 flex flex-col items-center justify-center p-2 gap-3 border rounded-xl border-neutrals-999">
             <Image
               src={avatar}
               width={100}
@@ -72,7 +75,11 @@ export default function Home() {
               className="rounded-full"
               onError={handleAvatarLoadError}
             />
-            {username && <div className="text-xs px-2 py-1 text-neutrals-200 bg-neutrals-999">{username}</div>}
+            {username && (
+              <div className="rounded-full text-xs px-2 py-1 text-neutrals-200 bg-neutrals-999 truncate max-w-[125px]">
+                {username}
+              </div>
+            )}
           </div>
         </div>
       </main>
