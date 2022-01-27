@@ -11,3 +11,7 @@
 ## Author
 
 Felipe Vasconcelos http://avasconcelos.com
+
+### TODO:
+
+- Add hover in the user image to display a card in a toolip format

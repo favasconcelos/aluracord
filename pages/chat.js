@@ -1,11 +1,12 @@
 import Head from 'next/head';
+import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import Loader from '../react/components/loader';
 import MessageList from '../react/components/messages-list';
 import { useUser } from '../react/context/user';
 import useCheckAuth from '../react/hooks/use-check-auth';
-import { fetchMessages, sendMessage } from '../react/lib/api';
+import { fetchMessages, removeMessage, sendMessage } from '../react/lib/api';
 
 export default function ChatPage() {
   const router = useRouter();
@@ -13,6 +14,7 @@ export default function ChatPage() {
   const { user, setUser } = useUser();
   const initialized = useCheckAuth();
 
+  const [loadingRemoveMessage, setLoadingRemoveMessage] = useState(false);
   const [loadingAddMessage, setLoadingAddMessage] = useState(false);
   const [loadingMessages, setLoadingMessages] = useState(true);
   const [messages, setMessages] = useState([]);
@@ -58,6 +60,18 @@ export default function ChatPage() {
     }
   }
 
+  async function handleRemoveMessage(id) {
+    try {
+      setLoadingRemoveMessage(true);
+      await removeMessage(id);
+      setMessages(prev => prev.filter(message => message.id != id));
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoadingRemoveMessage(false);
+    }
+  }
+
   return (
     <>
       <Head>
@@ -69,7 +83,10 @@ export default function ChatPage() {
         <div className="flex flex-col w-10/12 gap-4 p-6 border rounded-md bg-neutrals-700 border-neutrals-600">
           {/* Header */}
           <div className="flex flex-row justify-between align-middle">
-            <div className="text-sm text-neutrals-200">Chat</div>
+            <div className="flex items-center gap-2 text-sm text-neutrals-200">
+              <Image src={user.avatar_url} width={24} height={24} alt="avatar" className="rounded-full" />
+              {user.name}
+            </div>
             <div className="text-sm cursor-pointer text-neutrals-200 hover:text-neutrals-100" onClick={handleLogout}>
               Logout
             </div>
@@ -81,7 +98,12 @@ export default function ChatPage() {
             </div>
           )}
           {!loadingMessages && (
-            <MessageList messages={messages} className="p-6 rounded bg-neutrals-600 overflow-y-auto max-h-[400px]" />
+            <MessageList
+              messages={messages}
+              className="rounded bg-neutrals-600 overflow-y-auto max-h-[400px]"
+              loadingRemoveMessage={loadingRemoveMessage}
+              onRemoveMessage={handleRemoveMessage}
+            />
           )}
           {/* Form */}
           <form className="flex items-center gap-4" onSubmit={handleSubmit}>
@@ -89,7 +111,7 @@ export default function ChatPage() {
               autoFocus
               required
               type="text"
-              className="flex items-center w-full px-2 border rounded outline-none h-11 bg-neutrals-800 border-neutrals-999 text-neutral-200 hover:border-neutrals-400 focus:border-neutrals-400 disabled:bg-neutrals-400"
+              className="flex items-center w-full px-2 text-sm border rounded outline-none h-11 bg-neutrals-800 border-neutrals-999 text-neutral-200 hover:border-neutrals-400 focus:border-neutrals-400 disabled:bg-neutrals-400"
               value={text}
               onChange={e => setText(e.target.value)}
               disabled={loadingAddMessage}
