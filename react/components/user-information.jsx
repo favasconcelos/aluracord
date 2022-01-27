@@ -30,8 +30,12 @@ export default function UserInformationCard({ username }) {
 
   return (
     <div className="flex items-center gap-2">
-      <Image src={userInfo.avatar_url} width={24} height={24} alt="avatar" className="rounded-full" />
-      <div className="text-white">{userInfo.name}</div>
+      <Image src={userInfo.avatar_url} width={48} height={48} alt="avatar" className="rounded-full" />
+      <div className="flex flex-col items-center gap-1">
+        <div className="text-white">{userInfo.name}</div>
+        {userInfo.company && <div className="text-white">{userInfo.company}</div>}
+        {userInfo.location && <div className="text-white">{userInfo.location}</div>}
+      </div>
     </div>
   );
 }
