@@ -4,12 +4,14 @@ import { useEffect, useState } from 'react';
 import Loader from '../react/components/loader';
 import MessageList from '../react/components/messages-list';
 import { useUser } from '../react/context/user';
+import useCheckAuth from '../react/hooks/use-check-auth';
 import { fetchMessages, sendMessage } from '../react/lib/api';
 
 export default function ChatPage() {
   const router = useRouter();
 
   const { user, setUser } = useUser();
+  const initialized = useCheckAuth();
 
   const [loadingAddMessage, setLoadingAddMessage] = useState(false);
   const [loadingMessages, setLoadingMessages] = useState(true);
@@ -28,12 +30,12 @@ export default function ChatPage() {
         setLoadingMessages(false);
       }
     }
-    load();
-  }, []);
+    if (initialized) {
+      load();
+    }
+  }, [initialized]);
 
-  // if there is not user, redirect to home
   if (!user) {
-    router.replace('/');
     return null;
   }
 
