@@ -2,7 +2,10 @@ import cn from 'classnames';
 import Image from 'next/image';
 import { RiDeleteBinLine } from 'react-icons/ri';
 import { getAvatarUrl } from '../utils/common';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
+import Tooltip from 'rc-tooltip';
+import 'rc-tooltip/assets/bootstrap_white.css';
+import UserInformationCard from './user-information';
 
 function Message({ message, onRemoveMessage, loadingRemoveMessage }) {
   const avatar = getAvatarUrl(message.username);
@@ -14,11 +17,17 @@ function Message({ message, onRemoveMessage, loadingRemoveMessage }) {
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}>
       <div className="flex justify-between h-8">
-        <div className="flex items-center justify-start gap-3">
-          <Image src={avatar} width={24} height={24} alt="avatar" className="rounded-full" />
-          <div className="text-white">{message.author}</div>
-          <div className="text-xs text-neutrals-300">{dateStr}</div>
-        </div>
+        <Tooltip
+          placement="top"
+          trigger={['hover']}
+          overlay={<UserInformationCard username={message.username} />}
+          destroyTooltipOnHide>
+          <div className="flex items-center justify-start gap-3">
+            <Image src={avatar} width={24} height={24} alt="avatar" className="rounded-full" />
+            <div className="text-white">{message.author}</div>
+            <div className="text-xs text-neutrals-300">{dateStr}</div>
+          </div>
+        </Tooltip>
         {hovered && (
           <div
             className="p-2 rounded-full cursor-pointer text-neutrals-300 bg-neutrals-700 hover:bg-neutrals-999 disabled:bg-neutrals-500"
