@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import Loader from '../react/components/loader';
 import { useUser } from '../react/context/user';
 import useDebounce from '../react/hooks/use-debounce';
+import { fetchUser } from '../react/lib/api';
 
 const DEFAULT_USERNAME = 'favasconcelos';
 
@@ -21,34 +22,21 @@ export default function HomePage() {
   }
 
   useEffect(() => {
+    async function load(username) {
+      try {
+        setLoading(true);
+        const data = await fetchUser(username);
+        setLocalUser(data);
+      } catch (err) {
+        setLocalUser(null);
+      } finally {
+        setLoading(false);
+      }
+    }
     if (debouncedUsername) {
-      fetchUser(debouncedUsername);
+      load(debouncedUsername);
     }
   }, [debouncedUsername]);
-
-  function delay(timeout = 1000) {
-    return new Promise(resolve => {
-      setTimeout(resolve, timeout);
-    });
-  }
-
-  async function fetchUser(username) {
-    setLoading(true);
-    await delay();
-    try {
-      const response = await fetch(`https://api.github.com/users/${username}`);
-      if (response.status === 200) {
-        const data = await response.json();
-        setLocalUser(data);
-      } else {
-        setLocalUser(null);
-      }
-    } catch (err) {
-      setLocalUser(null);
-    } finally {
-      setLoading(false);
-    }
-  }
 
   async function handleSubmit(event) {
     event.preventDefault();

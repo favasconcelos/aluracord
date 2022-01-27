@@ -17,9 +17,10 @@ function Message({ message }) {
   );
 }
 
-export default function MessageList({ messages, className }) {
+export default function MessageList({ messages = [], className }) {
   return (
     <div className={cn('flex flex-col gap-4', className)}>
+      {messages.length === 0 && <div className="text-sm text-white">No messages yet...</div>}
       {messages.map(message => (
         <Message key={message.id} message={message} />
       ))}

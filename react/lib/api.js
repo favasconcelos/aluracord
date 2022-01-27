@@ -31,3 +31,13 @@ export async function sendMessage(user, content) {
 
   return data;
 }
+
+export async function fetchUser(username) {
+  const response = await fetch(`https://api.github.com/users/${username}`);
+  if (response.status === 200) {
+    const data = await response.json();
+    return data;
+  } else {
+    throw new Error('User not found');
+  }
+}
