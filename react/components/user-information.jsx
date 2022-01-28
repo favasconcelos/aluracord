@@ -13,6 +13,8 @@ export default function UserInformationCard({ username }) {
         toggleLoading(true);
         const data = await fetchUser(username);
         setUserInfo(data);
+      } catch {
+        console.log('user not found!');
       } finally {
         toggleLoading(false);
       }
@@ -25,7 +27,7 @@ export default function UserInformationCard({ username }) {
   }
 
   if (!userInfo) {
-    return <div>Error loading user info...</div>;
+    return <div className='text-neutrals-300'>Error loading user info...</div>;
   }
 
   return (
