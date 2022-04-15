@@ -2,6 +2,7 @@ import Head from 'next/head';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
+import { RiSendPlaneFill } from 'react-icons/ri';
 import Loader from '../react/components/loader';
 import MessageList from '../react/components/messages-list';
 import { useUser } from '../react/context/user';
@@ -82,7 +83,7 @@ export default function ChatPage() {
       <main className="flex items-center justify-center w-screen h-screen bg-red-200 bg-no-repeat bg-cover bg-home-background">
         <div className="flex flex-col w-10/12 gap-4 p-6 border rounded-md bg-neutrals-700 border-neutrals-600">
           {/* Header */}
-          <div className="flex flex-row justify-between align-middle">
+          <div className="flex flex-row items-center justify-between">
             <div className="flex items-center gap-2 text-sm text-neutrals-200">
               <Image src={user.avatar_url} width={24} height={24} alt="avatar" className="rounded-full" />
               {user.name}
@@ -107,21 +108,27 @@ export default function ChatPage() {
           )}
           {/* Form */}
           <form className="flex items-center gap-4" onSubmit={handleSubmit}>
-            <input
-              autoFocus
-              required
-              type="text"
-              className="flex items-center w-full px-2 text-sm border rounded outline-none h-11 bg-neutrals-800 border-neutrals-999 text-neutral-200 hover:border-neutrals-400 focus:border-neutrals-400 disabled:bg-neutrals-400"
-              value={text}
-              onChange={e => setText(e.target.value)}
-              disabled={loadingAddMessage}
-            />
-            <button
-              type="button"
-              className="p-2 border border-transparent rounded-full outline-none cursor-pointer bg-neutrals-800 border-neutrals-999 hover:border-neutrals-400 disabled:bg-neutrals-400"
-              disabled={loadingAddMessage}>
-              😁
-            </button>
+            <div className="relative w-full">
+              <input
+                autoFocus
+                required
+                placeholder="Type your message..."
+                type="text"
+                className="flex items-center w-full pl-2 pr-10 text-sm border rounded outline-none h-11 bg-neutrals-800 border-neutrals-999 text-neutral-200 hover:border-neutrals-400 focus:border-neutrals-400 disabled:bg-neutrals-400"
+                value={text}
+                onChange={e => setText(e.target.value)}
+                disabled={loadingAddMessage}
+              />
+              {loadingAddMessage ? (
+                <Loader className="absolute pointer-events-none top-4 right-4 text-neutrals-100" />
+              ) : (
+                <button
+                  type="submit"
+                  className="absolute p-2 transform -translate-y-1/2 top-1/2 right-2 text-neutrals-300">
+                  <RiSendPlaneFill />
+                </button>
+              )}
+            </div>
           </form>
         </div>
       </main>

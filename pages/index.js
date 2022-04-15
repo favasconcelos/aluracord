@@ -44,6 +44,10 @@ export default function HomePage() {
     router.push('/chat');
   }
 
+  function handleOpenUserProfile() {
+    window.open(localUser.html_url, '_blank').focus();
+  }
+
   const avatar = localUser ? localUser.avatar_url : '/github-avatar.png';
   return (
     <>
@@ -53,17 +57,21 @@ export default function HomePage() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="flex items-center justify-center w-screen h-screen bg-red-200 bg-no-repeat bg-cover bg-home-background">
-        <div className="flex flex-row p-6 border rounded-md bg-neutrals-700 md:p-8 gap-x-4 md:gap-x-10 border-neutrals-600">
-          <form onSubmit={handleSubmit}>
-            <h1 className="text-xl font-bold text-center text-white md:text-2xl">Boas vindas de volta!</h1>
-            <h2 className="mt-1 text-sm font-bold text-center text-neutrals-300">Aluracord - Alura Matrix</h2>
+        {/* Panel */}
+        <div className="grid grid-flow-row grid-cols-1 p-6 border rounded-md auto-rows-min gap-y-3 bg-neutrals-700 md:p-8 gap-x-4 md:gap-x-10 border-neutrals-600">
+          <div className="flex flex-col items-center justify-center">
+            <h1 className="text-xl font-bold text-white md:text-2xl">Boas vindas de volta!</h1>
+            <h2 className="mt-1 text-sm font-bold text-neutrals-300">Aluracord - Alura Matrix</h2>
+          </div>
+          {/* Form */}
+          <form onSubmit={handleSubmit} className="">
             <input
               autoFocus
               required
               id="username"
               name="username"
               autoComplete="username"
-              className="w-full px-3 text-white transition-colors border border-transparent rounded-md outline-none h-9 bg-neutrals-800 mt-7 hover:border-primary-700 focus:border-primary-700"
+              className="w-full px-3 text-white transition-colors border border-transparent rounded-md outline-none h-9 bg-neutrals-800 hover:border-primary-700 focus:border-primary-700"
               type="text"
               maxLength={20}
               placeholder="Usuário do GitHub"
@@ -78,16 +86,29 @@ export default function HomePage() {
               {loading && <Loader />}
             </button>
           </form>
-          <div className="flex flex-col items-center justify-center gap-3 p-2 border bg-neutrals-800 rounded-xl border-neutrals-999">
+          {/* User Info */}
+          <div className="flex flex-col items-center justify-center row-start-2 gap-2 p-2 border bg-neutrals-800 rounded-xl border-neutrals-999">
             {loading ? (
-              <Loader className="w-[100px] h-[100px] text-neutrals-300" />
+              <Loader className="w-[80px] h-[80px] text-neutrals-300" />
             ) : (
               <>
-                <Image src={avatar} width={100} height={100} alt="avatar" className="rounded-full" />
+                <Image src={avatar} width={80} height={80} alt="avatar" className="rounded-full" />
                 {localUser && (
-                  <div className="rounded text-xs p-2 text-neutrals-200 bg-neutrals-999 truncate max-w-[125px] text-center">
-                    <p>{localUser.name}</p>
-                    <p>{localUser.login}</p>
+                  <div
+                    className="flex flex-col items-center w-full gap-2 p-3 text-xs truncate border rounded cursor-pointer border-neutrals-999 text-neutrals-200 bg-neutrals-999 hover:bg-neutrals-700"
+                    onClick={handleOpenUserProfile}>
+                    <div className="font-bold">{localUser.name}</div>
+                    <div className="italic">@{localUser.login}</div>
+                    <div className="flex gap-2">
+                      <div className="flex flex-col items-center justify-center">
+                        <span className="font-bold">Followers</span>
+                        <span>{localUser.followers}</span>
+                      </div>
+                      <div className="flex flex-col items-center justify-center">
+                        <span className="font-bold">Following</span>
+                        <span>{localUser.following}</span>
+                      </div>
+                    </div>
                   </div>
                 )}
               </>
